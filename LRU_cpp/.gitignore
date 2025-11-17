@@ -2,3 +2,8 @@
 
 !.gitignore
 !README.md
+
+!*.cpp
+!*.hpp
+
+!Makefile
