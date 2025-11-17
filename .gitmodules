@@ -1,0 +1,3 @@
+[submodule "CodeQuality"]
+	path = CodeQuality
+	url = https://github.com/Frank0415/CodeQuality
