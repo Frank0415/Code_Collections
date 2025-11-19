@@ -1,3 +1,6 @@
 [submodule "CodeQuality"]
 	path = CodeQuality
 	url = https://github.com/Frank0415/CodeQuality
+[submodule "minimal-scheduler"]
+	path = minimal-scheduler
+	url = git@github.com:Frank0415/minimal-scheduler.git
