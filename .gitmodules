@@ -4,3 +4,6 @@
 [submodule "minimal-scheduler"]
 	path = minimal-scheduler
 	url = git@github.com:Frank0415/minimal-scheduler.git
+[submodule "rs_mlfq"]
+	path = rs_mlfq
+	url = git@github.com:Frank0415/rs_mlfq.git
