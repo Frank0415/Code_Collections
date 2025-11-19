@@ -2,48 +2,59 @@
 #define CoW_HPP
 
 #include "resource.hpp"
-#include <memory>
 #include <iostream>
+#include <memory>
 
-class CoWResource {
+class CoWResource
+{
 private:
-    std::shared_ptr<Resource> resource;
+  std::shared_ptr<Resource> resource;
 
 public:
-    CoWResource() : resource(std::make_shared<Resource>()) {}
+  CoWResource() : resource(std::make_shared<Resource>())
+  {
+  }
 
-    CoWResource(const CoWResource& other) : resource(other.resource) {
-        std::cout << "CoW copy: sharing resource." << std::endl;
-    }
+  CoWResource(const CoWResource& other) : resource(other.resource)
+  {
+    std::cout << "CoW copy: sharing resource." << std::endl;
+  }
 
-    CoWResource& operator=(const CoWResource& other) {
-        if (this != &other) {
-            resource = other.resource;
-            std::cout << "CoW assignment: sharing resource." << std::endl;
-        }
-        return *this;
+  CoWResource& operator=(const CoWResource& other)
+  {
+    if (this != &other)
+    {
+      resource = other.resource;
+      std::cout << "CoW assignment: sharing resource." << std::endl;
     }
+    return *this;
+  }
 
-    void modify(size_t index, int value) {
-        // Copy-on-write: if shared, create a copy
-        if (resource.use_count() > 1) {
-            std::cout << "CoW: copying on write..." << std::endl;
-            resource = std::make_shared<Resource>(*resource);
-        }
-        resource->modify(index, value);
+  void modify(size_t index, int value)
+  {
+    // Copy-on-write: if shared, create a copy
+    if (resource.use_count() > 1)
+    {
+      std::cout << "CoW: copying on write..." << std::endl;
+      resource = std::make_shared<Resource>(*resource);
     }
+    resource->modify(index, value);
+  }
 
-    int get(size_t index) const {
-        return resource->get(index);
-    }
+  int get(size_t index) const
+  {
+    return resource->get(index);
+  }
 
-    size_t size() const {
-        return resource->size();
-    }
+  size_t size() const
+  {
+    return resource->size();
+  }
 
-    size_t use_count() const {
-        return resource.use_count();
-    }
+  size_t use_count() const
+  {
+    return resource.use_count();
+  }
 };
 
 #endif
