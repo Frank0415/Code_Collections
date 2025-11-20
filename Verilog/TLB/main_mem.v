@@ -1,0 +1,103 @@
+`timescale 1ns / 1ps
+
+module main_mem(
+    input wire read_write_mem,
+    input wire [9:0] address_mem,
+    input wire [31:0] write_data_mem,
+    output reg [31:0] read_data_mem,
+    output reg done
+    );
+
+    reg [153:0] main_mem [1024:0];
+    wire [1:0] WordOffset;
+    integer i;
+
+    initial begin
+        begin
+            for (i = 0; i < 1024; i = i + 1) begin
+                main_mem[i] = 154'b0;
+            end
+        end
+        main_mem[0] = {26'b0, 32'hA, 32'hE, 32'hF, 32'h55555555};
+        main_mem[1] = 154'b0;
+        main_mem[2] = 154'b0;
+        main_mem[3] = 154'b0;
+        main_mem[4] = {26'b0, 32'hBBBBBBBB, 32'hAAAAAAAA, 32'hEEEEEEEE, 32'hCCCCCCCC};
+        main_mem[5] = 154'b0;
+        main_mem[6] = 154'b0;
+        main_mem[7] = 154'b0;
+        main_mem[8] = 154'b0;
+        main_mem[9] = 154'b0;
+        main_mem[10] = 154'b0;
+        main_mem[11] = 154'b0;
+        main_mem[12] = 154'b0;
+        main_mem[13] = 154'b0;
+        main_mem[14] = 154'b0;
+        main_mem[15] = 154'b0;
+        main_mem[16] = {26'b0, 32'h11111111, 32'h22222222, 32'h33333333, 32'h44444444};
+        main_mem[17] = 154'b0;
+        main_mem[18] = 154'b0;
+        main_mem[19] = 154'b0;
+        main_mem[20] = {26'b0, 32'h281, 32'h285, 32'h0, 32'h28d};
+        main_mem[21] = {26'b0, 32'h281, 32'h285, 32'h0, 32'h28d};
+        main_mem[22] = 154'b0;
+        main_mem[23] = 154'b0;
+        main_mem[24] = 154'b0;
+        main_mem[25] = {26'b0, 32'h191, 32'h195, 32'h199, 32'h191};
+        main_mem[26] = 154'b0;
+        main_mem[27] = 154'b0;
+        main_mem[28] = 154'b0;
+        main_mem[29] = {26'b0, 32'h1d1, 32'h1d5, 32'h1d9, 32'h1dd};
+        main_mem[30] = 154'b0;
+        main_mem[31] = 154'b0;
+        main_mem[32] = 154'b0;
+        main_mem[33] = {26'b0, 32'h55555555, 32'h66666666, 32'h77777777, 32'h88888888};
+        main_mem[34] = 154'b0;
+        main_mem[35] = 154'b0;
+        main_mem[36] = 154'b0;
+        main_mem[37] = 154'b0;
+        main_mem[38] = 154'b0;
+        main_mem[39] = 154'b0;
+        main_mem[40] = {26'b0, 32'h281, 32'h0, 32'h285, 32'h28d};
+        main_mem[41] = 154'b0;
+        main_mem[42] = 154'b0;
+        main_mem[43] = 154'b0;
+        main_mem[44] = 154'b0;
+        main_mem[45] = 154'b0;
+        main_mem[46] = 154'b0;
+        main_mem[47] = 154'b0;
+        main_mem[48] = {26'b0, 32'h55555555, 32'h66666666, 32'h77777777, 32'h88888888};
+        main_mem[49] = {26'b0, 32'h55555555, 32'h66666666, 32'h77777777, 32'h88888888};
+        main_mem[50] = 154'b0;
+        main_mem[51] = 154'b0;
+        main_mem[52] = 154'b0;
+        main_mem[53] = 154'b0;
+        main_mem[54] = 154'b0;
+        main_mem[55] = 154'b0;
+        main_mem[56] = 154'b0;
+        main_mem[57] = {26'b0, 32'h391, 32'h0, 32'h395, 32'h39d};
+        main_mem[58] = 154'b0;
+        main_mem[59] = 154'b0;
+        main_mem[60] = 154'b0;
+        main_mem[61] = {26'b0, 32'h3d1, 32'h3d5, 32'h3d9, 32'h3dd};
+        done = 1'b0;
+        read_data_mem = 32'b0;
+    end
+
+    assign WordOffset = address_mem[3:2];
+
+    always @(read_write_mem or address_mem) begin
+        #2 done = 1'b0;
+        if(read_write_mem == 1'b1) begin // write in data in main memory.
+            i = 127-32*WordOffset;
+            main_mem[address_mem[9:4]][i-:32] = write_data_mem[31:0];
+        end
+
+        if(read_write_mem == 1'b0) begin // read data from main memory to cache.
+            i = 127-32*WordOffset;
+            read_data_mem[31:0] = main_mem[address_mem[9:4]][i-:32];
+        end
+        #2 done = 1'b1;
+    end
+
+endmodule
