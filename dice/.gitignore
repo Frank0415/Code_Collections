@@ -6,3 +6,5 @@
 !.gitignore
 !Makefile
 !*.h
+
+*.mod*
