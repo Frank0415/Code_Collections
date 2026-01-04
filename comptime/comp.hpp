@@ -2,10 +2,12 @@
 
 template <int n> class factorial
 {
-  static const int value = n * factorial<n - 1>::value;
+public:
+  static const long long int value = n * factorial<n - 1>::value;
 };
 
 template <> class factorial<0>
 {
-  static const int value = 1;
+public:
+  static const long long int value = 1;
 };

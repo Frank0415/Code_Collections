@@ -8,5 +8,5 @@
 
 int main()
 {
-
-  }
+  std::cout << factorial<20>::value << '\n';
+}
